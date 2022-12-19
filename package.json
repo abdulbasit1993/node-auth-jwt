@@ -1,0 +1,35 @@
+{
+  "name": "node-auth-jwt",
+  "version": "1.0.0",
+  "description": "A simple Node JS API for use with Authentication and Authorization of Users made using Express, MongoDB and using JWT.",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abdulbasit1993/node-auth-jwt.git"
+  },
+  "keywords": [
+    "node.js",
+    "express",
+    "jwt",
+    "authentication",
+    "mongodb"
+  ],
+  "author": "Abdul Basit Mehtab",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abdulbasit1993/node-auth-jwt/issues"
+  },
+  "homepage": "https://github.com/abdulbasit1993/node-auth-jwt#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.8.0"
+  }
+}
