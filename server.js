@@ -17,8 +17,6 @@ const Role = db.role;
 
 const mongoURL = `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`;
 
-console.log('mongoURL is ==>>>>> ', mongoURL);
-
 db.mongoose
     .connect(mongoURL, {
         useNewUrlParser: true,

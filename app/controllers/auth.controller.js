@@ -15,7 +15,7 @@ exports.signup = (req, res) => {
 
     user.save((err, user) => {
         if (err) {
-            res.status(500).send({ message: err });
+            res.status(500).send({ success: false, message: err });
             return;
         }
 
@@ -26,36 +26,36 @@ exports.signup = (req, res) => {
                 },
                 (err, roles) => {
                     if (err) {
-                        res.status(500).send({ message: err });
+                        res.status(500).send({ success: false, message: err });
                         return;
                     }
 
                     user.roles = roles.map(role => role._id);
                     user.save(err => {
                         if (err) {
-                            res.status(500).send({ message: err });
+                            res.status(500).send({ success: false, message: err });
                             return;
                         }
 
-                        res.send({ message: "User was registered successfully!" });
+                        res.send({ success: true, message: "User was registered successfully!", data: [{ username: user.username, email: user.email, _id: user._id }] });
                     });
                 }
             );
         } else {
             Role.findOne({ name: "user" }, (err, role) => {
                 if (err) {
-                    res.status(500).send({ message: err });
+                    res.status(500).send({ success: false, message: err });
                     return;
                 }
 
                 user.roles = [role._id];
                 user.save(err => {
                     if (err) {
-                        res.status(500).send({ message: err });
+                        res.status(500).send({ success: false, message: err });
                         return;
                     }
 
-                    res.send({ message: "User was registered successfully!" });
+                    res.send({ success: true, message: "User was registered successfully!", data: [{ username: user.username, email: user.email, _id: user._id }] });
                 });
             });
         }
@@ -69,12 +69,12 @@ exports.signin = (req, res) => {
     .populate("roles", "-__v")
     .exec((err, user) => {
         if (err) {
-            res.status(500).send({ message: err });
+            res.status(500).send({ success: false, message: err });
             return;
         }
 
         if (!user) {
-            return res.status(404).send({ message: "User Not Found"});
+            return res.status(404).send({ success: false, message: "User Not Found"});
         }
 
         var passwordIsValid = bcrypt.compareSync(
@@ -84,7 +84,8 @@ exports.signin = (req, res) => {
 
         if (!passwordIsValid) {
             return res.status(401).send({
-                accessToken: null,
+                success: false,
+                token: null,
                 message: "Invalid Password!"
             });
         }
@@ -96,14 +97,11 @@ exports.signin = (req, res) => {
         var authorities = [];
 
         for (let i = 0; i < user.roles.length; i++) {
-            authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
+            authorities.push(user.roles[i].name);
         }
         res.status(200).send({
-            id: user._id,
-            username: user.username,
-            email: user.email,
-            roles: authorities,
-            accessToken: token
+            success: true,
+            data: [{token: token, role: user.roles}],
         });
     });
 };
